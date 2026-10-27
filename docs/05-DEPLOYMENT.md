@@ -29,11 +29,11 @@
 6. Quay về **Cài đặt dự án → Thuộc tính của tập lệnh**, điền `TELEGRAM_WEBHOOK_URL` bằng URL `/exec` **của chính bạn** rồi lưu. Xem [ảnh Script Properties](../images/04-script-properties.png).
 ## Kích hoạt Telegram Bot (môi trường thử nghiệm)
 
-7. **Chỉ khi đã thiết lập cơ chế xác thực webhook phù hợp và dùng tài khoản thử nghiệm**, trong Apps Script Editor chọn hàm `setupBot` ở danh sách hàm, sau đó nhấn **Chạy**. **Không chạy thủ công `doPost(e)`**; Telegram sẽ tự gửi HTTP POST đến Web App khi có tin nhắn.
+7. **Chỉ khi đã thiết lập cơ chế xác thực webhook phù hợp và dùng tài khoản thử nghiệm**, trong Apps Script Editor chọn hàm `setupBot` ở danh sách hàm, sau đó nhấn **Chạy**. 
 
 ![Chọn hàm setupBot trong Apps Script](../images/06-setupbot-select-function.png)
 
-8. Mở **Nhật ký thực thi**, xác nhận phản hồi có `"ok":true` và `"description":"Webhook was set"`. Điều này chỉ xác nhận Telegram **đã đăng ký webhook**, không xác nhận các request gửi đến endpoint đã được xác thực. **Lưu ý:** trong ảnh minh họa này, vùng code nền thuộc phiên bản cũ còn hàm `saveWebConfig` — repo hiện tại đã bỏ hàm này.
+8. Cửa sổ **Nhật ký thực thi** hiện ra, xác nhận phản hồi có `"ok":true` và `"description":"Webhook was set"` là đã hoàn thành bước setupBot .
 
 ![Log chạy setupBot thành công](../images/06-setupbot-success-log.png)
 
