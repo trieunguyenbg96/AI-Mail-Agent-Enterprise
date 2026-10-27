@@ -33,9 +33,10 @@
 
 ![Chọn hàm setupBot trong Apps Script](../images/06-setupbot-select-function.png)
 
-8. Cửa sổ **Nhật ký thực thi** hiện ra, xác nhận phản hồi có `"ok":true` và `"description":"Webhook was set"` là đã hoàn thành bước setupBot .
+8. Cửa sổ **Nhật ký thực thi** hiện ra, xác nhận phản hồi có `"ok":true` và `"description":"Webhook was set"` là đã hoàn thành bước setupBot và đồng thời Bot bên Telegram cũng sẽ gửi tin nhắn đầu tiên để setup rule cho từng mục Email.
 
 ![Log chạy setupBot thành công](../images/06-setupbot-success-log.png)
+![Telegram hiển thị thiết lập 4 Rule Email](../images/07-telegram-rule-onboarding.png)
 
 9. Khi bot gửi thông báo thiết lập **4 Rule Email**, người dùng có thể chọn quy tắc mẫu hoặc tự nhập theo nhu cầu. Ảnh minh họa là màn hình onboarding của bot; việc hiển thị màn hình này không thay thế kiểm thử tính đúng đắn của xử lý email.
 
