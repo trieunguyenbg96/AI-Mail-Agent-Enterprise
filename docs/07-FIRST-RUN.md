@@ -44,5 +44,3 @@ Nhấn vào email để xem nội dung tóm tắt, đề xuất xử lý, hạn 
 - [ ] Mở được chi tiết một email thử nghiệm.
 - [ ] Tìm kiếm bằng tiếng Việt trả về kết quả hợp lý.
 - [ ] Thao tác thay đổi trạng thái hoặc tạo nháp chỉ thực hiện trên email thử nghiệm.
-
-**Cảnh báo:** thành công trên Telegram không chứng minh webhook an toàn trước request giả mạo. Kiểm tra xác thực trước khi deploy production.
