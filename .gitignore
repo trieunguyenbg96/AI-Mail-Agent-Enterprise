@@ -1,0 +1,19 @@
+# Local configuration / secrets
+.env
+.env.*
+!.env.example
+*.secret
+*.credentials.json
+credentials.json
+token.json
+
+# Apps Script tooling
+.clasp.json
+.clasp.*.json
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
