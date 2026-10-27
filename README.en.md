@@ -68,12 +68,21 @@ Each installer stores their own configuration in Apps Script Script Properties.
 - [07 — First Run](docs/07-FIRST-RUN.md)
 - [06 — Historical Code Audit](docs/06-CODE-AUDIT.md)
 
-## Important security limitations
+## 🔐 Security & Usage Notes
 
-**This is a community demo, not a hardened production system.** The published Apps Script manifest uses `USER_DEPLOYING` and `ANYONE_ANONYMOUS`. The webhook endpoint is publicly reachable and runs code with the deploying account's authorized permissions. Chat ID filtering is **not a trusted Telegram-origin verification mechanism**: requests can be forged when the URL and allowed ID are known. This project intentionally does not include a gateway validating Telegram's secret-token header.
+AI Mail Agent Enterprise — Community Edition is designed to be **simple, accessible, and easy to customize**, allowing anyone to explore AI-powered email automation using Google Apps Script without setting up a dedicated server.
 
-Use a **dedicated test Google account first**, never commit credentials or expose the full deployment URL, do not share one Gmail-owner deployment with untrusted users, and review [SECURITY.md](SECURITY.md), OAuth scopes, and API quotas before any real use. Contributors are welcome to add stronger authentication in forks or PRs.
+For a smooth experience while keeping personal information protected, please consider the following:
 
+- **Private Configuration:** Gemini API Keys, Telegram Bot Tokens, and Chat IDs are stored in Google Apps Script Properties rather than being hardcoded into the source code.
+- **Gmail Permissions:** The Agent operates with the permissions granted to the Google account that deploys it. Users are encouraged to review the requested permissions before authorizing access.
+- **Telegram Webhook:** The Community Edition uses Google Apps Script's direct Webhook integration to simplify deployment. Chat ID validation is included, while advanced Webhook source authentication is not implemented in this version.
+- **Getting Started:** We recommend trying the Agent with a test Gmail account before integrating it into your daily workflow.
+- **Customization & Extensions:** Users are welcome to enhance security, implement additional authentication mechanisms, or develop new features based on their needs.
+
+This project is distributed under the **MIT License**, encouraging learning, experimentation, collaboration, and community-driven development.
+
+📖 For additional technical details, please refer to [SECURITY.md](SECURITY.md).
 ## Repository layout
 
 ```text
