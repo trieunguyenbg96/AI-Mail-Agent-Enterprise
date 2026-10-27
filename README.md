@@ -84,15 +84,21 @@ Script Properties (của từng người triển khai): API Key, Bot Token, Chat
 | [07 — First Run](docs/07-FIRST-RUN.md) | Thiết lập Rule, menu, tra cứu và xem email |
 | [06 — Code Audit](docs/06-CODE-AUDIT.md) | Ghi chú rà soát lịch sử, cần đọc với phiên bản nguồn tương ứng |
 
-## Bảo mật và giới hạn
+## 🔐 Bảo mật và lưu ý khi sử dụng
 
-**Đọc trước khi cấp quyền truy cập Gmail.** Bản Community cố ý ưu tiên đơn giản, không có gateway xác thực Telegram Webhook. Web App sử dụng `USER_DEPLOYING` và `ANYONE_ANONYMOUS`: request truy cập công khai có thể kích hoạt mã chạy bằng quyền của người deploy. Kiểm tra Chat ID **không** đủ để chứng minh request được gửi từ Telegram; kẻ biết URL và Chat ID có thể gửi request giả. Không xem đây là hệ thống production có bảo mật doanh nghiệp.
+AI Mail Agent Enterprise — Community Edition được phát triển với mục tiêu **đơn giản, dễ cài đặt và dễ tùy chỉnh**, giúp mọi người có thể trải nghiệm AI Agent thông qua Google Apps Script mà không cần thiết lập máy chủ riêng.
 
-- Chỉ thử ban đầu bằng **tài khoản Google/Gmail thử nghiệm**, không chứa dữ liệu nhạy cảm.
-- Tự tạo và lưu khóa qua **Script Properties**; không public token, key, URL webhook đầy đủ hoặc dữ liệu Gmail.
-- Không chia sẻ một deployment chạy bằng quyền Gmail của mình cho nhiều người dùng.
-- Rà soát OAuth scopes, hạn mức Apps Script/Gemini và [SECURITY.md](SECURITY.md) trước khi dùng lâu dài.
-- Cộng đồng có thể phát triển thêm lớp gateway kiểm tra Telegram secret header hoặc giải pháp tương đương; tính năng này **chưa được bao gồm**.
+Để sử dụng thuận tiện và bảo vệ thông tin cá nhân, người dùng nên lưu ý:
+
+- **Thông tin cấu hình riêng biệt:** Gemini API Key, Telegram Bot Token và Chat ID được lưu trong Google Apps Script Properties, không cần khai báo trực tiếp trong mã nguồn.
+- **Quyền truy cập Gmail:** Agent hoạt động bằng quyền của tài khoản Google triển khai. Người dùng nên xem xét các quyền được yêu cầu trước khi cấp phép.
+- **Telegram Webhook:** Phiên bản Community sử dụng Webhook trực tiếp của Google Apps Script để tối giản quá trình cài đặt. Cơ chế kiểm tra Chat ID đã được tích hợp; xác thực nguồn Webhook nâng cao chưa được triển khai trong phiên bản này.
+- **Trải nghiệm ban đầu:** Khuyến khích sử dụng tài khoản Gmail thử nghiệm để làm quen với các tính năng trước khi áp dụng vào công việc.
+- **Tùy chỉnh và mở rộng:** Người dùng có thể tự do cải tiến các cơ chế bảo mật, bổ sung xác thực nâng cao hoặc phát triển chức năng mới tùy theo nhu cầu.
+
+Dự án được chia sẻ theo giấy phép **MIT License**, khuyến khích cộng đồng học tập, trải nghiệm, đóng góp và cùng phát triển.
+
+📖 Xem thêm thông tin kỹ thuật tại [SECURITY.md](SECURITY.md).
 
 ## Cấu trúc repository
 
