@@ -1,30 +1,76 @@
-# Rà soát mã nguồn V5.0 — yêu cầu sửa trước khi public release
+# Technical Notes — AI Mail Agent Enterprise V5.2
 
-## Tình trạng
+## 1. Giới thiệu
 
-Đây là bản mã nguồn gốc được đóng gói phục vụ đối chiếu, **không phải phiên bản đã xử lý an toàn**. Chưa kiểm thử trực tiếp với Gmail, Gemini, Telegram hoặc Apps Script runtime.
+Tài liệu này tổng hợp một số ghi chú kỹ thuật, thay đổi và định hướng phát triển của **AI Mail Agent Enterprise — Community Edition**.
 
-## Mức NGHIÊM TRỌNG
+Dự án được phát triển trên nền tảng Google Apps Script, tích hợp Gmail, Google Gemini AI và Telegram Bot.
 
-1. Ở phiên bản gốc, `doGet()` tạo trang HTML bằng cách nhúng trực tiếp các giá trị `GEMINI_API_KEY` và `TELEGRAM_BOT_TOKEN` lấy từ Script Properties vào thuộc tính `value` của form. Trên deployment `ANYONE_ANONYMOUS`, người có URL có thể xem nguồn trang và đọc secrets, dù trường là `type=password`. Cần loại bỏ mọi hành vi đưa secrets đã lưu từ server ra trình duyệt, và tránh nhúng giá trị không escape vào HTML.
-2. Ở phiên bản gốc, `saveWebConfig(formData)` là hàm phía server có thể gọi qua `google.script.run` từ trang HTML Apps Script. Vì trang đang cho phép anonymous và chạy quyền `USER_DEPLOYING`, người ngoài có khả năng ghi đè Script Properties và chạy `setupBot()`; không bảo vệ bằng Chat ID Telegram. Cần tách setup khỏi public web endpoint, chỉ cho quản trị viên có danh tính xác thực cấu hình, hoặc cấu hình riêng trong Apps Script editor. Không đưa web setup hiện tại lên deployment công khai.
-3. `doPost(e)` chấp nhận JSON chỉ dựa trên Chat ID trong payload, thiếu bằng chứng cập nhật do Telegram gửi. Người biết Chat ID và URL có thể gửi payload giả. Apps Script `doPost(e)` không cung cấp headers tùy ý để dựa thẳng vào cơ chế `X-Telegram-Bot-Api-Secret-Token`; cân nhắc gateway hỗ trợ xác minh header/signature và forward sự kiện hợp lệ, hoặc thiết kế thay thế chặt chẽ hơn. Chú ý không công khai endpoint hiện tại.
+Mục tiêu của phiên bản Community là mang đến giải pháp AI Mail Agent dễ tiếp cận, dễ triển khai và có thể tùy chỉnh theo nhu cầu cá nhân.
 
-## Lỗi chức năng
+## 2. Những cải tiến trong phiên bản V5.2
 
-4. Trong `doPost`, đầu nhánh `if (update.callback_query)` dùng biến `data` trước khai báo `const data` bên dưới. Việc truy cập trong temporal dead zone gây `ReferenceError` và chặn xử lý callback. Ngoài ra một số nhánh rule xử lý trước/đúp với các nhánh chính; cần hợp nhất router và kiểm thử callback.
-5. Chuỗi comment `// ... (Các nhánh ... giữ nguyên) ...` là ghi chú, không phải triển khai; cần so khớp tất cả nút keyboard và xử lý callback thực tế trước khi hứa chức năng.
+### Cấu hình ứng dụng
 
-## Khuyến nghị trước khi phát hành
+- Loại bỏ giao diện Web dùng để nhập API Key và Telegram Bot Token.
+- Sử dụng Google Apps Script Properties để quản lý thông tin cấu hình.
+- Mỗi người dùng tự thiết lập API Key, Bot Token, Chat ID và Webhook URL trong tài khoản Google của mình.
+- Không lưu trực tiếp thông tin xác thực trong mã nguồn.
 
-- Giữ secret trong Script Properties nhưng không phản chiếu ra HTML. Tránh HTML setup công khai; cân nhắc xóa hẳn `doGet` setup, cấu hình qua editor.
-- Rà soát authorization cho tất cả thao tác Gmail (đọc, mark read, tạo draft), callback, lệnh Telegram và hạn mức.
-- Đổi Gemini key và bot token nếu URL cấu hình Web App từng được chia sẻ/để truy cập công khai.
-- Kiểm thử webhook, callback, Gmail, thao tác cảnh báo theo tài khoản thử nghiệm; xem logs tránh lộ nội dung email.
-- Chọn `LICENSE` hợp lệ trước khi gọi là open-source.
+### Telegram Bot
 
-## Kết quả thay đổi (bản no-web-config)
+- Tích hợp Telegram Webhook thông qua `doPost(e)`.
+- Sử dụng `setupBot()` để đăng ký và kích hoạt Webhook.
+- Kiểm tra Chat ID nhằm giới hạn tài khoản Telegram được phép tương tác.
+- Hỗ trợ menu tương tác, tìm kiếm và thiết lập 4 Rule Email.
 
-- Đã xóa hoàn toàn `doGet()` dựng trang cấu hình và `saveWebConfig(formData)` (bao gồm lời gọi HTML tới hàm này).
-- Không sửa logic `doPost`, xử lý Gmail, Gemini, Telegram hay `setupBot`.
-- **Vẫn còn vấn đề:** `doPost` chỉ kiểm tra `TELEGRAM_CHAT_ID` trong JSON request, không đủ để xác thực nguồn Telegram. Cần kiểm soát webhook trước khi công khai dùng thật.
+### Gmail và Gemini AI
+
+- Tra cứu email trực tiếp từ Gmail.
+- Tìm kiếm email bằng ngôn ngữ tự nhiên.
+- Tóm tắt nội dung và đề xuất hướng xử lý bằng Gemini AI.
+- Hỗ trợ xem chi tiết email, đánh dấu đã đọc và tạo bản nháp trả lời.
+
+## 3. Một số lưu ý kỹ thuật
+
+**Google Apps Script Permissions**
+
+Agent sử dụng các quyền Google được người triển khai cấp. Người dùng nên xem xét quyền truy cập trước khi kích hoạt ứng dụng.
+
+**Telegram Webhook**
+
+Phiên bản Community sử dụng Webhook trực tiếp của Google Apps Script để tối giản quá trình thiết lập.
+
+Việc kiểm tra Chat ID giúp giới hạn người dùng hợp lệ, nhưng không thay thế cho cơ chế xác thực nguồn HTTP request.
+
+Các giải pháp xác thực nâng cao có thể được bổ sung tùy theo nhu cầu triển khai.
+
+**Script Properties**
+
+Các thông tin như API Key và Bot Token được lưu trong Script Properties. Người dùng nên hạn chế chia sẻ quyền chỉnh sửa dự án Apps Script và tránh đưa các giá trị cấu hình cá nhân lên GitHub.
+
+## 4. Khả năng mở rộng
+
+Dự án khuyến khích cộng đồng nghiên cứu và phát triển thêm các tính năng như:
+
+- Xác thực Telegram Webhook nâng cao.
+- Hỗ trợ nhiều tài khoản Gmail.
+- Tích hợp Microsoft Outlook.
+- Tự động phân loại và thông báo email theo lịch.
+- Bổ sung hệ thống logging, monitoring và xử lý lỗi.
+- Tối ưu hiệu năng và hạn mức Google Apps Script.
+
+## 5. Kiểm thử và đóng góp
+
+Các chức năng chính đã được minh họa thông qua quá trình thử nghiệm với Google Apps Script, Gmail và Telegram.
+
+Tuy nhiên, khả năng hoạt động có thể khác nhau tùy theo cấu hình tài khoản, quyền truy cập API và hạn mức dịch vụ.
+
+Nếu phát hiện lỗi hoặc có ý tưởng cải tiến, cộng đồng có thể tạo GitHub Issue hoặc Pull Request để cùng phát triển dự án.
+
+---
+
+**Maintainer:** Trieu Nguyen IT  
+**Version:** V5.2 Community Edition  
+**License:** MIT  
+**Development:** AI-assisted development
