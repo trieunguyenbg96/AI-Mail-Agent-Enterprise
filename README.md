@@ -97,7 +97,6 @@ AI Mail Agent Enterprise — Community Edition được phát triển với mụ
 - **Tùy chỉnh và mở rộng:** Người dùng có thể tự do cải tiến các cơ chế bảo mật, bổ sung xác thực nâng cao hoặc phát triển chức năng mới tùy theo nhu cầu.
 
 Dự án được chia sẻ theo giấy phép **MIT License**, khuyến khích cộng đồng học tập, trải nghiệm, đóng góp và cùng phát triển.
-
 📖 Xem thêm thông tin kỹ thuật tại [SECURITY.md](SECURITY.md).
 
 ## Cấu trúc repository
